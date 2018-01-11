@@ -1,0 +1,199 @@
+public void clusterActions(int numberofclusters, int player ){
+
+
+		final int   RUNNING_FOR = 1000;
+		int numberofactions = mg.getNumActions(0);
+		double[] extreampayoffs = mg.getExtremePayoffs();
+		List<double[]>[] clusters = new List[numberofclusters]; // create an array of list. Each list will contain arrays of double
+		double[][] clusterpoints = new double[numberofclusters][numberofactions];  // cluster points for each cluster
+		double[][] distancefromcluster = new double[numberofclusters][numberofactions];
+		int runningInstance = 0;
+		double[] sumofdifferences = new double[numberofclusters];  //store the sum of differences for clusters
+		for(int i=0; i< numberofclusters; i++){
+
+			clusters[i] = new ArrayList<double[]>(); 
+		}
+
+
+		//assign random values to cluster points
+
+		Random rand = new Random();
+		for(int i =0; i<numberofclusters; i++ ){
+			for(int j =0; j<numberofactions; j++){
+
+				clusterpoints[i][j] = (double)rand.nextInt(  (int)(extreampayoffs[0] + extreampayoffs[0]) ) - extreampayoffs[0];
+
+
+				//-extreampayoffs[1] + (int) (Math.random() * ((extreampayoffs[0] - (-extreampayoffs[1])) + 1));//rand.nextInt((int)maxclusternumber[0]) +1;
+			}
+		}
+
+
+
+		while(runningInstance++ < RUNNING_FOR){
+			/*
+			 * Now iterate over all the possible action touples for player 1. 
+			 * calclate the difference from cluster points
+			 * assign to the cluster with the minimum difference.
+			 *  
+			 */
+
+			for(int i = 0; i < numberofactions; i++){
+				for(int j = 0; j < numberofactions; j++){
+
+
+					int outcome[] = {i+1, j+1};
+					double tmppayoff = mg.getPayoff(outcome, 0); //get the payoff for player 1
+
+					for(int k =0; k<numberofclusters; k++)
+					{
+						/*
+						 * calculate the differences of payoffs for each cluster points in every cluster
+						 */
+						
+						if((tmppayoff < 0 && clusterpoints[k][j] > 0) ||  (tmppayoff > 0 && clusterpoints[k][j] < 0))
+							
+						{
+							distancefromcluster[k][j] = (tmppayoff + clusterpoints[k][j]);
+						}
+						else 
+						{
+							distancefromcluster[k][j] = (tmppayoff - clusterpoints[k][j]);
+						}
+						
+
+
+					}
+
+				}
+
+				/*
+				 * Here you have all the differences for action i 
+				 * 
+				 */
+
+				for(int l =0; l< numberofclusters; l++){
+					sumofdifferences[l] = 0;
+					for(int m =0; m< numberofactions; m++){
+						sumofdifferences[l] += distancefromcluster[l][m];
+
+					}
+				}
+
+				/*
+				 * now you have all the sum. find the minimum sum. then assign that action i in the that cluster
+				 */
+
+				double min = 1000000;
+				int minindex = 0;
+				for(int n =0; n< sumofdifferences.length; n++)
+				{
+					if(min > sumofdifferences[n])
+					{
+						min = sumofdifferences[n];
+						minindex = n;
+					}
+				}
+
+				/*
+				 * minindex has the index for cluster
+				 * make a tuple like (action, payoffs1, payoff2,...)
+				 */
+
+				double[] tupleincluster = new double[numberofactions+1]; // +1 for the action
+
+				tupleincluster[0] = i+1; //the action in the first index
+
+
+				/*
+				 * now assign the payoffs
+				 */
+
+				int[] tmpoutcome = new int[2];
+
+				for(int p = 0; p< numberofactions; p++)
+				{
+					tmpoutcome[0] = i+1;
+					tmpoutcome[1] = p+1;
+					tupleincluster[p+1] = mg.getPayoff(tmpoutcome, 0);  //for player 1
+				}
+
+				clusters[minindex].add(tupleincluster); 
+
+
+			}  // end of outer for loop
+
+
+			/*
+			 * now recalculate the cluster points
+			 */
+			int average = 0;
+			for(int i = 0; i< numberofclusters; i++){
+
+
+				int clustersize = clusters[i].size();
+
+				for(int j = 0; j< numberofactions; j++){
+					average = 0;   // corrected, average should be reset after calculating for every action
+					for(double[] x: clusters[i]){
+						average += x[j+1]; 
+					}
+
+
+					if(clustersize != 0){
+						clusterpoints[i][j] = average/clustersize; 
+					}
+
+				}
+
+
+
+
+
+			}
+
+
+			//System.out.print("Hello");
+
+			System.out.print("Iteration: "+ runningInstance + " ");
+
+			for(int i =0; i< numberofclusters; i++){
+
+				System.out.print("Cluster: "+ i + " ");
+				for(int j =0; j< numberofactions; j++){
+
+					System.out.print(" "+clusterpoints[i][j]);
+
+				}
+				System.out.print("\n");
+			}
+
+
+			for(int i=0; i< numberofclusters; i++)
+			{
+				System.out.print("Cluster: " + i + " "+ "Actions: ");
+				for(double[] x : clusters[i]){
+					System.out.print(x[0] + " ");
+
+
+				}
+
+				if(runningInstance != RUNNING_FOR)
+					clusters[i].clear();
+				System.out.print("\n");
+			}
+
+			System.out.print("\n");
+			System.out.print("\n");
+			System.out.print("\n");
+
+
+
+
+
+		}    // end of while loop 	
+
+
+
+
+	}

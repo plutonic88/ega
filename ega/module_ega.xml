@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_ega" default="compile.module.ega">
+  <dirname property="module.ega.basedir" file="${ant.file.module_ega}"/>
+  
+  
+  <property name="compiler.args.ega" value="${compiler.args}"/>
+  
+  <property name="ega.output.dir" value="${module.ega.basedir}/out/production/Ega"/>
+  <property name="ega.testoutput.dir" value="${module.ega.basedir}/out/test/Ega"/>
+  
+  <path id="ega.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ega.module.production.classpath"/>
+  
+  <path id="ega.runtime.production.module.classpath">
+    <pathelement location="${ega.output.dir}"/>
+  </path>
+  
+  <path id="ega.module.classpath">
+    <pathelement location="${ega.output.dir}"/>
+  </path>
+  
+  <path id="ega.runtime.module.classpath">
+    <pathelement location="${ega.testoutput.dir}"/>
+    <pathelement location="${ega.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ega">
+    <patternset refid="ignored.files"/>
+    <exclude name="out/**"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ega">
+    <patternset refid="excluded.from.module.ega"/>
+  </patternset>
+  
+  <path id="ega.module.sourcepath">
+    <dirset dir="${module.ega.basedir}/../../game">
+      <include name="ega"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ega" depends="compile.module.ega.production,compile.module.ega.tests" description="Compile module Ega"/>
+  
+  <target name="compile.module.ega.production" description="Compile module Ega; production classes">
+    <mkdir dir="${ega.output.dir}"/>
+    <javac destdir="${ega.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.ega}"/>
+      <bootclasspath refid="ega.module.bootclasspath"/>
+      <classpath refid="ega.module.production.classpath"/>
+      <src refid="ega.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ega"/>
+    </javac>
+    
+    <copy todir="${ega.output.dir}/ega">
+      <fileset dir="${module.ega.basedir}">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ega.tests" depends="compile.module.ega.production" description="compile module Ega; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ega" description="cleanup module">
+    <delete dir="${ega.output.dir}"/>
+    <delete dir="${ega.testoutput.dir}"/>
+  </target>
+</project>

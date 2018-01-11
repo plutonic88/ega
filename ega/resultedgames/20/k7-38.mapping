@@ -1,0 +1,33 @@
+Number of players: 2
+Number of actions: 
+Player 1 : 50
+Player 2 : 50
+
+ 
+Number of clusters: 
+Player 1 : 7
+Player 2 : 7
+
+ 
+Mapping of actions: 
+
+Player 1 : 
+Cluster 1 Actions: 9, 28, 31, 45, 50, 
+Cluster 2 Actions: 4, 10, 13, 25, 26, 
+Cluster 3 Actions: 1, 12, 23, 27, 35, 42, 43, 44, 47, 48, 
+Cluster 4 Actions: 11, 14, 20, 36, 49, 
+Cluster 5 Actions: 7, 8, 15, 17, 37, 
+Cluster 6 Actions: 2, 3, 5, 18, 21, 22, 29, 32, 34, 46, 
+Cluster 7 Actions: 6, 16, 19, 24, 30, 33, 38, 39, 40, 41, 
+
+ 
+Player 2 : 
+Cluster 1 Actions: 9, 17, 24, 26, 28, 30, 32, 34, 44, 50, 
+Cluster 2 Actions: 5, 6, 23, 31, 42, 
+Cluster 3 Actions: 1, 18, 20, 41, 46, 
+Cluster 4 Actions: 2, 12, 29, 36, 39, 
+Cluster 5 Actions: 10, 14, 16, 19, 22, 27, 38, 43, 47, 48, 
+Cluster 6 Actions: 7, 33, 37, 40, 49, 
+Cluster 7 Actions: 3, 4, 8, 11, 13, 15, 21, 25, 35, 45, 
+
+ 
